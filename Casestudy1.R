@@ -157,7 +157,18 @@ chicago_stamen <- get_stamenmap(
   zoom = 12,
   maptype = "toner"
 )
+#Then we plot the data on the map
+ggmap(chicago_stamen,darken = c(0.8, "white")) +
+   geom_curve(casual, mapping = aes(x = start_lng, y = start_lat, xend = end_lng, yend = end_lat, alpha= total, color=rideable_type), size = 0.5, curvature = .2,arrow = arrow(length=unit(0.2,"cm"), ends="first", type = "closed")) +
+    coord_cartesian() +
+    labs(title = "Most popular routes by casual users",x=NULL,y=NULL, color="User type", caption = "Data by Motivate International Inc") +
+    theme(legend.position="none")
 
+ggmap(chicago_stamen,darken = c(0.8, "white")) +
+    geom_curve(member, mapping = aes(x = start_lng, y = start_lat, xend = end_lng, yend = end_lat, alpha= total, color=rideable_type), size = 0.5, curvature = .2,arrow = arrow(length=unit(0.2,"cm"), ends="first", type = "closed")) +  
+    coord_cartesian() +
+    labs(title = "Most popular routes by annual members",x=NULL,y=NULL, caption = "Data by Motivate International Inc") +
+    theme(legend.position="none")
 
 
 
