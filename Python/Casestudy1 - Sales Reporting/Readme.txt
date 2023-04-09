@@ -1,7 +1,7 @@
-In this project, I use Jupiter notebook to Process, Clean and Pull out some chart to answer some questions relate to Sales data.
+In this project, I use Jupiter notebook to Process, Clean and Answer some questions relate to Sales data.
 
 Main focus / Functions applied:
- - Import and merged many csv files into 1
+ - Import and merged many csv files into 1 file
  - Summary file using info() and describe() function
  - Drop N/A, Drop row base on specific condition
  - Change data type using to_numeric() and to_datetime()
