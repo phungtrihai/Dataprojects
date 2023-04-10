@@ -20,6 +20,7 @@ FROM
 | --------------- |
 | 1000            |
 
+*=> Approach: Use count distinct to get total of customer*
 
 **2./ What is the monthly distribution of trial plan `start_date` values for our dataset - use the start of the month as the group by value**
 
@@ -52,6 +53,7 @@ ORDER BY monthh
 | 2020-11-01T00:00:00.000Z | 75          |
 | 2020-12-01T00:00:00.000Z | 84          |
 
+*=> Appoach: Use `date_trunc` to get the month's of date and count value according to that month
 
 **3./ What plan start_date values occur after the year 2020 for our dataset? Show the breakdown by count of events for each plan_name**
 
@@ -79,6 +81,7 @@ ORDER BY p.plan_id
 | 3       | pro annual    | 63           |
 | 4       | churn         | 71           |
 
+*=> Approach: Join and count value that after 2020-12-31
 
 **4./ What is the customer count and percentage of customers who have churned rounded to 1 decimal place?**
 
@@ -98,6 +101,8 @@ FROM
 | churned_customer | total_customer | percentage |
 | ---------------- | -------------- | ---------- |
 | 307              | 1000           | 30         |
+
+*=> Appoach: Use `CASE WHEN` to asign 1 to rows that have **plan_id = 4** and then calculate percentage*
 
 **5./How many customers have churned straight after their initial free trial - what percentage is this rounded to the nearest whole number?**
 
@@ -136,7 +141,7 @@ SELECT 100* (SELECT COUNT (*) FROM cte_5b) /
 | ---------- |
 | 9          |
 
-Step: Create Common table expression that have customer id, start date when plan_id = 0 and the date they end.
+*=> Approach: Churned straight after free trial mean that churned date minus free trial date = 7*
 
 **6./ What is the number and percentage of customer plans after their initial free trial?**
 
@@ -210,6 +215,7 @@ GROUP BY plan_id
 | 2       | 326     | 32         |
 | 4       | 236     | 23         |
 
+*=> Approach: Use window function to get latest plan status of that customer and then count numbers and percentage *
 
 **8./ How many customers have upgraded to an annual plan in 2020?**
 
@@ -227,6 +233,7 @@ WHERE
 | ----- |
 | 195   |
 
+*=> Approach: Count rows that have plan_id = 3 in 2020*
 
 **9./ How many days on average does it take for a customer to an annual plan from the day they join Foodie-Fi?**
 
@@ -257,6 +264,7 @@ ON X.customer_id = cte_9.customer_id;
 | -------------------- |
 | 104.6201550387596899 |
 
+*=> Approach: Create table that have **plan_id = 1** and table have **plan_id = 3** then join them to get the interval between 2 date and then average them*
 
 **10./ Can you further breakdown this average value into 30 day periods (i.e. 0-30 days, 31-60 days etc)**
 
@@ -300,6 +308,8 @@ GROUP BY interval_types
 | > 60 DAYS      | 185     | 71         |
 | 0-30 DAYS      | 49      | 18         |
 
+*=> Kind of the same with previous question but add 1 more step which is `CASE WHEN` to add column base on interval of each customer_id*
+
 **11./ How many customers downgraded from a pro monthly to a basic monthly plan in 2020?**
 
 *Answer:*
@@ -325,6 +335,8 @@ WHERE basic.start_date > pro.start_date;
 ````
 
 ## **C. Challenge Payment Question**
+
+
 The Foodie-Fi team wants you to create a new payments table for the year 2020 that includes **amounts paid by each customer** in the `subscriptions table` with the following requirements:
 
 * monthly payments always occur on the same day of month as the original start_date of any monthly paid plan
