@@ -85,13 +85,13 @@ ORDER BY p.plan_id
 *Answer:*
 ````sql
 SELECT 
-	SUM (CASE WHEN plan_id = 4 THEN 1 
+    SUM (CASE WHEN plan_id = 4 THEN 1 
          ELSE 0 END) churned_customer,
     count (distinct customer_id) as total_customer,
     100 * SUM (CASE WHEN plan_id = 4 THEN 1 ELSE 0 END)/count (distinct customer_id) percentage
 
 FROM 
-	foodie_fi.subscriptions
+    foodie_fi.subscriptions
 
 ````
 *Result:*
@@ -106,7 +106,7 @@ FROM
 with 
 cte_5 as (
     SELECT 
-	    customer_id, 
+        customer_id, 
         start_date
     FROM foodie_fi.subscriptions
     WHERE plan_id = 0)
@@ -114,7 +114,7 @@ cte_5 as (
 cte_5b as (
     SELECT 
         cte_5.customer_id,
-		cte_5.start_date,
+        cte_5.start_date,
         X.churned_date,
         X.churned_date - cte_5.start_date AS day_cancel
     FROM cte_5 
@@ -143,13 +143,13 @@ Step: Create Common table expression that have customer id, start date when plan
 *Answer:*
 ````sql
 with 
-	cte_6a as (
+    cte_6a as (
 		SELECT 
 			*, 
     		RANK () OVER (PARTITION BY customer_id ORDER BY start_date ASC) as second_action
 		FROM foodie_fi.subscriptions ),
         
-	cte_6b as (
+    cte_6b as (
 		SELECT 
 			plan_id, 
     		count (*) as numbers
@@ -158,7 +158,7 @@ with
 		GROUP BY plan_id) 
     
 SELECT 
-	p.plan_id,
+    p.plan_id,
     p.plan_name,
     cte_6b.numbers,
     round(100*cte_6b.numbers/sum (cte_6b.numbers) OVER ()) as percentage	
@@ -194,7 +194,7 @@ with cte_7 as (
 	WHERE start_date = last_date)
     
 SELECT 
-	plan_id,
+    plan_id,
     count (*) as numbers,
     100*count (*)/ (SELECT COUNT(*) FROM cte_7b) as percentage
 FROM cte_7b
@@ -216,11 +216,11 @@ GROUP BY plan_id
 *Answer:*
 ````sql
 SELECT 
-	COUNT (DISTINCT customer_id) 
+    COUNT (DISTINCT customer_id) 
 FROM 
-	foodie_fi.subscriptions
+    foodie_fi.subscriptions
 WHERE 
-	start_date <= '2020-12-31' AND plan_id = 3;
+    start_date <= '2020-12-31' AND plan_id = 3;
 ````    
 *Result:*
 | count |
@@ -234,7 +234,7 @@ WHERE
 ````sql
 with cte_9 as (
     SELECT 
-	    customer_id, 
+        customer_id, 
         start_date
     FROM foodie_fi.subscriptions
     WHERE plan_id = 0)
@@ -244,8 +244,8 @@ SELECT
 FROM cte_9 
 JOIN
 	(SELECT 
-		customer_id,
-   	 	start_date anual_sub_date
+        customer_id,
+        start_date anual_sub_date
 	FROM foodie_fi.subscriptions
 	WHERE plan_id = 3) AS X
     
@@ -264,7 +264,7 @@ ON X.customer_id = cte_9.customer_id;
 ````sql
 with cte_10 as (
     SELECT 
-	    customer_id, 
+        customer_id, 
         start_date
     FROM foodie_fi.subscriptions
     WHERE plan_id = 0)
@@ -287,7 +287,7 @@ JOIN
 ON X.customer_id = cte_10.customer_id)
 
 SELECT 
-	interval_types,
+    interval_types,
     count (*) as numbers,
     round (100*count(*)/(SELECT COUNT(*) FROM cte_10b)) as percentage
 FROM cte_10b
