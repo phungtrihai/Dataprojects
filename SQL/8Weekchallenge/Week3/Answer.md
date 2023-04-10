@@ -53,7 +53,7 @@ ORDER BY monthh
 | 2020-11-01T00:00:00.000Z | 75          |
 | 2020-12-01T00:00:00.000Z | 84          |
 
-*=> Appoach: Use `date_trunc` to get the month's of date and count value according to that month
+*=> Appoach: Use `date_trunc` to get the month's of date and count value according to that month*
 
 **3./ What plan start_date values occur after the year 2020 for our dataset? Show the breakdown by count of events for each plan_name**
 
@@ -81,7 +81,7 @@ ORDER BY p.plan_id
 | 3       | pro annual    | 63           |
 | 4       | churn         | 71           |
 
-*=> Approach: Join and count value that after 2020-12-31
+*=> Approach: Join and count value that after 2020-12-31*
 
 **4./ What is the customer count and percentage of customers who have churned rounded to 1 decimal place?**
 
@@ -102,7 +102,7 @@ FROM
 | ---------------- | -------------- | ---------- |
 | 307              | 1000           | 30         |
 
-*=> Appoach: Use `CASE WHEN` to asign 1 to rows that have **plan_id = 4** and then calculate percentage*
+*=> Appoach: Use `CASE WHEN` to assign 1 to rows that have **plan_id = 4** and then calculate percentage*
 
 **5./How many customers have churned straight after their initial free trial - what percentage is this rounded to the nearest whole number?**
 
@@ -179,6 +179,7 @@ ORDER BY p.plan_id;
 | 3       | pro annual    | 37      | 4          |
 | 4       | churn         | 92      | 9          |
 
+*=> Approach: Using `window function` **rank() = 2** to get customer's plan after free trial and then count numbers and percentage* 
 
 **7./ What is the customer count and percentage breakdown of all 5 plan_name values at 2020-12-31?**
 
@@ -215,7 +216,7 @@ GROUP BY plan_id
 | 2       | 326     | 32         |
 | 4       | 236     | 23         |
 
-*=> Approach: Use window function to get latest plan status of that customer and then count numbers and percentage *
+*=> Approach: Use `window function` to get latest plan status of that customer and then count numbers and percentage *
 
 **8./ How many customers have upgraded to an annual plan in 2020?**
 
@@ -233,7 +234,7 @@ WHERE
 | ----- |
 | 195   |
 
-*=> Approach: Count rows that have plan_id = 3 in 2020*
+*=> Approach: Count rows that have **plan_id = 3** in 2020*
 
 **9./ How many days on average does it take for a customer to an annual plan from the day they join Foodie-Fi?**
 
