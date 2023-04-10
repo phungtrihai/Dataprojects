@@ -58,7 +58,7 @@ ORDER BY monthh
 *Answer:*
 ````sql
 SELECT 
-	p.plan_id, 
+    p.plan_id, 
     p.plan_name, 
     count(*) as number_plans
 FROM 
