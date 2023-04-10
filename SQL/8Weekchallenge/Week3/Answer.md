@@ -216,7 +216,7 @@ GROUP BY plan_id
 | 2       | 326     | 32         |
 | 4       | 236     | 23         |
 
-*=> Approach: Use `window function` to get latest plan status of that customer and then count numbers and percentage *
+*=> Approach: Use `window function` to get latest plan status of that customer and then count numbers and percentage*
 
 **8./ How many customers have upgraded to an annual plan in 2020?**
 
