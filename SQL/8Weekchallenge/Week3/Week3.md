@@ -62,13 +62,13 @@ SELECT
     p.plan_name, 
     count(*) as number_plans
 FROM 
-	foodie_fi.subscriptions s
+    foodie_fi.subscriptions s
 JOIN 
-	foodie_fi.plans p ON s.plan_id = p.plan_id
+    foodie_fi.plans p ON s.plan_id = p.plan_id
 WHERE 
-	s.start_date > '2020-12-31'
+    s.start_date > '2020-12-31'
 GROUP BY 
-	p. plan_id, p.plan_name
+    p. plan_id, p.plan_name
 ORDER BY p.plan_id
 ````
 *Result:*
