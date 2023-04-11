@@ -23,7 +23,7 @@ ORDER BY
 | B           | 74           |
 | C           | 36           |
 
-*=> Approach: `Group by` **customer_id** and then `sum` **price** to get the amount_pend*
+*=> Approach: `Group by` **customer_id** and then `sum` **price** to get the amount_pend*.
 ***
 **2./ How many days has each customer visited the restaurant?**
 
@@ -48,7 +48,7 @@ ORDER BY
 | A           | 4       |
 | C           | 2       |
 
-*=> Approach: `count distinct` by customer to get the date each customer visit the restaurant*
+*=> Approach: `count distinct` by customer to get the date each customer visit the restaurant*.
 ***
 **3./ What was the first item from the menu purchased by each customer?**
 
@@ -72,7 +72,8 @@ FROM
 JOIN 
     dannys_diner.menu menu
 ON sales.product_id = menu.product_id
-JOIN ab ON sales.order_date = ab.first_date
+JOIN ab 
+ON sales.order_date = ab.first_date
 GROUP BY 
     sales.customer_id, 
     menu.product_name
@@ -86,19 +87,18 @@ ORDER BY sales.customer_id;
 | B           | curry        |
 | C           | ramen        |
 
-*=> Approach: find the `first date` each customer buy product and join with sales table to get that product*
+*=> Approach: find the `first date` each customer buy product and join with sales table to get that product*.
 
-*=> Others Approach: use `window function` and `rank()` to get the `first date` and then filter rows that have order_date = first_date*
+*=> Others Approach: use `window function` and `rank()` to get the `first date` and then filter rows that have **order_date = first_date***.
 ***
 **4./  What is the most purchased item on the menu and how many times was it purchased by all customers?**
 
 *Answer:*
 ````sql
 SELECT 
-	menu.product_id,
+    menu.product_id,
     menu.product_name,
     count(*) as times
-
 FROM 
     dannys_diner.sales sales
 JOIN 
@@ -115,7 +115,7 @@ LIMIT 1;
 | ---------- | ------------ | ----- |
 | 3          | ramen        | 8     |
 
-*=> Approach: `Group by` product_id and then count times*
+*=> Approach: `Group by` product_id and then count times*.
 ***
 **5./ Which item was the most popular for each customer?**
 
@@ -157,7 +157,7 @@ WHERE ranking = 1;
 | B           | sushi        | 1       |
 | C           | ramen        | 1       |
 
-*=> Approach: Use `window function` and `rank()` to calculate the most buy product**
+*=> Approach: Use `window function` and `rank()` to calculate the most buy product*.
 ***
 **6./ Which item was purchased first by the customer after they became a member?**
 
@@ -197,7 +197,7 @@ ON X.date = CTE_6.date_after_join;
 | A           | 3          | 2021-01-07T00:00:00.000Z | 2021-01-10T00:00:00.000Z | 3               |
 | B           | 1          | 2021-01-09T00:00:00.000Z | 2021-01-11T00:00:00.000Z | 2               |
 
-*=> Approach: Merge with members table to get the `join_date` and then find the first `order_date` after they join*
+*=> Approach: Merge with members table to get the `join_date` and then find the first `order_date` after they join*.
 ***
 **7./ Which item was purchased just before the customer became a member?**
 
@@ -235,7 +235,7 @@ ON X.date = CTE_7.date_after_join;
 | A           | 2          | 2021-01-07T00:00:00.000Z | 2021-01-01T00:00:00.000Z | -6              |
 | B           | 1          | 2021-01-09T00:00:00.000Z | 2021-01-04T00:00:00.000Z | -5              |
 
-*=> Approach: kind of the same with previous question, just need to find the first `order_date` that before `join_date`*
+*=> Approach: kind of the same with previous question, just need to find the first `order_date` that before `join_date`*.
 ***
 **8./ What is the total items and amount spent for each member before they became a member?**
 
@@ -272,7 +272,7 @@ GROUP BY
 | B           | 3           | 40            |
 | A           | 2           | 25            |
 
-*Approach: filter `order_date` before `join_date` and count product_id as total items and sum price as amount spend*
+*=> Approach: filter `order_date` before `join_date` and count product_id as total items and sum price as amount spend*.
 ***
 **9./  If each $1 spent equates to 10 points and sushi has a 2x points multiplier - how many points would each customer have?**
 
@@ -311,7 +311,7 @@ GROUP BY customer_id;
 | C           | 360     |
 | A           | 860     |
 
-*=> Approach: Use `CASE WHEN` to assign point to each product and then sum it*
+*=> Approach: Use `CASE WHEN` to assign point to each product and then sum it*.
 ***
 **10./ In the first week after a customer joins the program (including their join date) they earn 2x points on all items, not just sushi - how many points do customer A and B have at the end of January?**
 
@@ -354,4 +354,4 @@ GROUP BY customer_id;
 | A           | 1370  |
 | B           | 1060  |
 
-*=> Approach: Just like question number 9 but add 1 more condition that in the first week after join they have 2x point*
+*=> Approach: Just like question number 9 but add 1 more condition that in the first week after join they have 2x point*.
