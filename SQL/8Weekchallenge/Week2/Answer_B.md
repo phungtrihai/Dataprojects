@@ -144,10 +144,10 @@ with cte_6 as (
         order_id,
         round  (replace (distance, 'km', '')::numeric) distance,
         substring (duration, 0, 3)::numeric as duration
-FROM 
-    pizza_runner.runner_orders
-WHERE 
-    duration <> 'null' )
+    FROM 
+        pizza_runner.runner_orders
+    WHERE 
+        duration <> 'null' )
 
 SELECT 
     runner_id,
