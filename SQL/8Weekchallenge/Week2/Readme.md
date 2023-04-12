@@ -5,7 +5,7 @@
 - [Business Task](#business-task)
 - [Entity Relationship Diagram](#entity-relationship-diagram)
 - [Case Study Questions](#case-study-questions)
-
+- [Link to the Case Study Details](https://8weeksqlchallenge.com/case-study-2/)
 ***
 
 ## Business Task

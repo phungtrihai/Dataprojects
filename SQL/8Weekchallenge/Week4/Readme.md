@@ -3,7 +3,12 @@
 <img src="https://8weeksqlchallenge.com/images/case-study-designs/4.png" width="500" height="520" alt="image">
 
 ***
-
+## 📚 Table of Contents
+- [Business Task](#business-task)
+- [Entity Relationship Diagram](#entity-relationship-diagram)
+- [Case Study Questions](#case-study-questions)
+- [Link to the Case Study Details](https://8weeksqlchallenge.com/case-study-4/)
+***
 ## Business Task
 Danny decides to launch a new initiative - Data Bank!
 
