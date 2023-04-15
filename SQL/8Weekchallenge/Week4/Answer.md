@@ -4,9 +4,9 @@
 *Answer:*
 ```sql
 SELECT
-	count (distinct node_id) unique_node
+    count (distinct node_id) unique_node
 FROM 
-	data_bank.customer_nodes;
+    data_bank.customer_nodes;
 ```
 
 *Result:*
@@ -19,10 +19,10 @@ FROM
 *Answer:*
 ```sql
 SELECT
-	r.region_name,
+    r.region_name,
     count (c.node_id)
 FROM 
-	data_bank.customer_nodes c
+    data_bank.customer_nodes c
 JOIN data_bank.regions r
 ON c.region_id = r.region_id
 GROUP BY r.region_name;
@@ -42,7 +42,7 @@ GROUP BY r.region_name;
 *Answer:*
 ```sql
 SELECT
-	r.region_name,
+    r.region_name,
     count (distinct c.customer_id)
 FROM 
 	data_bank.customer_nodes c
@@ -66,9 +66,9 @@ GROUP BY r.region_name;
 *Answer:*
 ```sql
 SELECT
-	avg(end_date - start_date) reallocate_days
+    avg(end_date - start_date) reallocate_days
 FROM 
-	data_bank.customer_nodes c
+    data_bank.customer_nodes c
 WHERE end_date <> '9999-12-31';
 ```
 *Result:*
@@ -82,8 +82,9 @@ WHERE end_date <> '9999-12-31';
 ```sql
 WITH 
 reallocation_days_cte AS
-    (SELECT *,
-        (end_date - start_date) AS reallocation_days
+    (SELECT 
+    *,
+    (end_date - start_date) AS reallocation_days
     FROM data_bank.customer_nodes
     INNER JOIN data_bank.regions USING (region_id)
     WHERE end_date!='9999-12-31'),
@@ -151,7 +152,7 @@ SELECT
     count (txn_date) as unique_count,
     sum (txn_amount) as total_amount
 FROM
-	data_bank.customer_transactions
+    data_bank.customer_transactions
 GROUP BY 1;
 ```    
 
@@ -173,7 +174,7 @@ SELECT
     count (txn_date) as unique_count,
     sum (txn_amount) as total_amount
 FROM
-	data_bank.customer_transactions
+    data_bank.customer_transactions
 GROUP BY
 	1;
 ```
@@ -206,10 +207,8 @@ SELECT
     sum(CASE WHEN txn_type = 'withdrawal' THEN 1 ELSE 0 END) AS withdrawal_count
 FROM
     data_bank.customer_transactions
-GROUP BY
-	1, 2
-ORDER BY 
-	1, 2)
+GROUP BY 1, 2
+ORDER BY 1, 2)
 
 SELECT 
     months,
@@ -261,7 +260,7 @@ cte_4 as (
 )
 
 SELECT 
-	*,
+    *,
     sum(changes) OVER (PARTITION BY customer_id ORDER BY months 
     ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) balance
 FROM cte_4
@@ -306,10 +305,8 @@ cte_5a as (
     m.customer_id,
     m.months,
     COALESCE(sum(CASE WHEN ct.txn_type = 'deposit' THEN ct.txn_amount ELSE ct.txn_amount*-1 END), 0) changes
-    FROM 
-	    data_bank.customer_transactions ct
-    RIGHT JOIN
-	    months m
+    FROM data_bank.customer_transactions ct
+    RIGHT JOIN months m
     ON ct.customer_id = m.customer_id
     AND m.months = date_trunc ('month', ct.txn_date)
     GROUP BY 1, 2
@@ -318,7 +315,7 @@ cte_5a as (
 ,
 cte_5b as (
     SELECT 
-	*,
+    *,
     sum(changes) OVER (PARTITION BY customer_id ORDER BY months 
     ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) balance
     FROM cte_5a
@@ -326,19 +323,20 @@ cte_5b as (
 ,
 cte_5c as (
     SELECT 
-	customer_id,
+    customer_id,
     months,
     balance,
     lead (balance, 1) OVER (PARTITION BY customer_id ORDER BY months) next_month_balance,
     (100*lead (balance, 1) OVER (PARTITION BY customer_id ORDER BY months)/nullif(balance,0))::int as changes  
     FROM cte_5b )
 
-SELECT 100*(
+SELECT 
+    100*(
 	SELECT count (distinct customer_id)  
 	FROM cte_5c
 	WHERE changes > 105) / 
-(SELECT count (distinct customer_id)  
-FROM cte_5c) AS percentage
+    (SELECT count (distinct customer_id)  
+    FROM cte_5c) AS percentage
 ```
 
 *Result:*
