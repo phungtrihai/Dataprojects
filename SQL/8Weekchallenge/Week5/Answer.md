@@ -55,9 +55,9 @@ FROM data_mart.weekly_sales);
 *Answer:*
 ```sql
 SELECT 
-	distinct (to_char (week_date, 'Day'))
+    distinct (to_char (week_date, 'Day'))
 FROM
-	clean_weekly_sales;
+    clean_weekly_sales;
 ```
 
 *Result:*
@@ -123,10 +123,10 @@ WHERE
 *Answer:*
 ```sql
 SELECT 
-	calendar,
+    calendar,
     sum (transactions) as transactions
 FROM
-	clean_weekly_sales
+    clean_weekly_sales
 GROUP BY 1 
 ORDER BY 1;
 ```
@@ -143,11 +143,11 @@ ORDER BY 1;
 *Answer:*
 ```sql
 SELECT 
-	region,
+    region,
     month_number,
     sum (sales) as total_sales
 FROM
-	clean_weekly_sales
+    clean_weekly_sales
 GROUP BY 1,2 
 ORDER BY 1,2;
 ```
@@ -176,10 +176,10 @@ ORDER BY 1,2;
 *Answer:*
 ```sql
 SELECT 
-	platform,
+    platform,
     sum (transactions) as transactions_count
 FROM
-	clean_weekly_sales
+    clean_weekly_sales
 GROUP BY 1 
 ORDER BY 1,2;
 ```
@@ -197,17 +197,17 @@ ORDER BY 1,2;
 ```sql
 with cte_6 as(
 SELECT 
-	month_number,
+    month_number,
     sum(CASE WHEN platform = 'Retail' THEN sales ELSE 0 END) AS Retail_sales ,
     sum(CASE WHEN platform = 'Shopify' THEN sales ELSE 0 END) AS Shopify_sales,
     sum (sales) sales
 FROM
-	clean_weekly_sales
+    clean_weekly_sales
 GROUP BY 1 
 ORDER BY 1,2)
 
 SELECT 
-	month_number,
+    month_number,
     round(100*retail_sales/sales,2) as retails_sales_pct,
     round(100*shopify_sales/sales,2) as shopify_sales_pct
 FROM cte_6
@@ -235,17 +235,17 @@ Use `CASE WHEN` to create column for retail and shopify sales and then calculate
 ```sql
 with cte_7 as(
 SELECT 
-	calendar,
+    calendar,
     sum(CASE WHEN demographic = 'Couples' THEN sales ELSE 0 END) AS Couples_sales ,
     sum(CASE WHEN demographic = 'Families' THEN sales ELSE 0 END) AS Families_sales,
     sum (sales) sales
 FROM
-	clean_weekly_sales
+    clean_weekly_sales
 GROUP BY 1 
 ORDER BY 1,2)
 
 SELECT 
-	calendar,
+    calendar,
     round(100*Couples_sales/sales,2) as Couples_sales_pct,
     round(100*Families_sales/sales,2) as Families_sales_pct
 FROM cte_7
@@ -266,12 +266,12 @@ ORDER BY 1;
 *Answer:*
 ```sql
 SELECT 
-	age_band,
+    age_band,
     demographic,
     sum(sales) sales,
     100 * sum(sales) / (SELECT sum(sales) FROM clean_weekly_sales WHERE platform = 'Retail') as contribution
 FROM
-	clean_weekly_sales
+    clean_weekly_sales
 WHERE platform = 'Retail'     
 GROUP BY 1, 2
 ORDER BY 4 DESC;    
