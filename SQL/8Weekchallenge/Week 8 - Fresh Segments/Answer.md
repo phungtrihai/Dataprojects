@@ -40,10 +40,10 @@ LIMIT 10;
 *Answer:*
 ```sql
 SELECT
-	month_year,
+    month_year,
     count (*) as records
 FROM
-	fresh_segments.interest_metrics 
+    fresh_segments.interest_metrics 
 GROUP BY 1
 ORDER BY 1 NULLS FIRST;
 ```
@@ -87,15 +87,15 @@ WHERE month_year IS NULL;
 *Answer:*
 ```sql
 SELECT
-	count (interest_id) not_in_map
+    count (interest_id) not_in_map
 FROM    
-	fresh_segments.interest_metrics
+    fresh_segments.interest_metrics
 WHERE interest_id::int NOT IN (SELECT distinct id FROM fresh_segments.interest_map);
 
 SELECT
-	count (id) not_in_metric
+    count (id) not_in_metric
 FROM    
-	fresh_segments.interest_map
+    fresh_segments.interest_map
 WHERE id NOT IN (SELECT distinct interest_id::int FROM fresh_segments.interest_metrics);
 ```
 
@@ -113,11 +113,13 @@ WHERE id NOT IN (SELECT distinct interest_id::int FROM fresh_segments.interest_m
 *Answer:*
 ```sql
 SELECT
-	maps.id,
+    maps.id,
     count (metric.interest_id) as record
-FROM fresh_segments.interest_map maps
-LEFT JOIN fresh_segments.interest_metrics metric
-ON 	maps.id = metric.interest_id::INT
+FROM 
+    fresh_segments.interest_map maps
+LEFT JOIN 
+    fresh_segments.interest_metrics metric
+ON maps.id = metric.interest_id::INT
 GROUP BY 1
 LIMIT 10;
 ```
@@ -146,7 +148,7 @@ Because all id from interest_metric are in interest_map so we can use inner or l
 *Answer:*
 ```sql
 SELECT
-	interest_id,
+    interest_id,
     count (distinct month_year) appearance
 FROM fresh_segments.interest_metrics
 GROUP BY 1
@@ -176,14 +178,14 @@ LIMIT 10;
 ```sql
 WITH cte_2 as (
 SELECT
-	interest_id,
+    interest_id,
     count (distinct month_year) appearance
 FROM fresh_segments.interest_metrics
 GROUP BY 1)
 ,
 cte_2b as (
 SELECT 
-	appearance,
+    appearance,
     count (interest_id) id_count,
     (SELECT count (interest_id) FROM cte_2) total_id    
 FROM cte_2
@@ -252,7 +254,7 @@ WITH CTE AS
     
 SELECT
   month_year,
-    count (distinct interest_id) unique_interests
+  count (distinct interest_id) unique_interests
 FROM
   fresh_segments.interest_metrics
 WHERE interest_id 
@@ -306,12 +308,12 @@ CREATE TEMP TABLE filtered_data AS (
 		GROUP BY interest_id
 		HAVING count(DISTINCT month_year) >= 6
 	)
-	SELECT *
-	FROM fresh_segments.interest_metrics
-	WHERE interest_id IN (
-			SELECT interest_id
-			FROM cte_total_months
-		)
+SELECT *
+FROM fresh_segments.interest_metrics
+WHERE interest_id IN (
+	SELECT interest_id
+	FROM cte_total_months)
+
 );
 SELECT 
     month_year,
@@ -346,7 +348,7 @@ LIMIT 10;
 *Answer:*
 ```sql 
  SELECT
- 	im.interest_name,
+    im.interest_name,
     avg (t1.ranking) as ranking
  FROM filtered_data t1
  JOIN fresh_segments.interest_map im
@@ -404,7 +406,7 @@ LIMIT 5;
 with 
 cte_4 as (
     SELECT
- 	    interest_id,
+        interest_id,
         stddev_samp (percentile_ranking) as std_percentile
     FROM filtered_data
     GROUP BY 1
@@ -413,19 +415,19 @@ cte_4 as (
 ,
 cte_4b as (
     SELECT
-	    interest_id,
+        interest_id,
         max (percentile_ranking) OVER (PARTITION BY interest_id) as max_percentile,
         min (percentile_ranking) OVER (PARTITION BY interest_id) as min_percentile
     FROM filtered_data
     WHERE interest_id IN (SELECT interest_id FROM cte_4))
 
 SELECT
-	t1.interest_id,
+    t1.interest_id,
     t2.max_percentile,
     t2.min_percentile,
     t1.std_percentile
 FROM
-	cte_4 t1
+    cte_4 t1
 JOIN cte_4b t2
 ON t1.interest_id = t2.interest_id
 GROUP BY 1,2,3,4;
@@ -460,12 +462,12 @@ DROP TABLE IF EXISTS top10_by_month;
 CREATE TEMP TABLE top10_by_month AS 
 WITH cte_1 as (
     SELECT
-	    month_year,
+        month_year,
         interest_id,
         round (avg(composition / index_value)::numeric ,2) as avg_composition,
         rank () OVER (PARTITION BY month_year ORDER BY avg(composition / index_value) DESC) AS ranks
     FROM
- 	    fresh_segments.interest_metrics
+        fresh_segments.interest_metrics
     GROUP BY 1, 2
     ORDER BY 1 ASC, 3 DESC)
 
@@ -508,7 +510,7 @@ FROM top10_by_month;
 *Answer:*
 ```sql
 SELECT
-	interest_id,
+    interest_id,
     count (*) times
 FROM top10_by_month    
 GROUP BY 1
@@ -533,7 +535,7 @@ SELECT
     month_year,
     ROUND (avg (avg_composition), 2) avg_composition
 FROM
-	top10_by_month
+    top10_by_month
 GROUP BY 1
 ORDER BY 1;
 ```
