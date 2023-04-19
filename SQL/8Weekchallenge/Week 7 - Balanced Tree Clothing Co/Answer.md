@@ -9,11 +9,11 @@
 *Answer:*
 ```sql
 SELECT
-	sum(qty) as total_quantity,
+    sum(qty) as total_quantity,
     sum(qty*price) as rvn_before_discount,
     ROUND (sum(discount)) as total_discount
 FROM
-	balanced_tree.sales; 
+    balanced_tree.sales; 
 ```
 
 *Result:*
@@ -28,9 +28,9 @@ FROM
 *Answer:*
 ```sql
 SELECT
-	count (distinct (txn_id)) unique_txn
+    count (distinct (txn_id)) unique_txn
 FROM
-	balanced_tree.sales;
+    balanced_tree.sales;
 ```
 *Result:*
 | unique_txn |
@@ -42,10 +42,10 @@ FROM
 *Answer:*
 ```sql
 SELECT
-	txn_id,
+    txn_id,
     count (distinct prod_id) unique_products
 FROM
-	balanced_tree.sales
+    balanced_tree.sales
 GROUP BY 1
 LIMIT 10;
 ```
@@ -70,14 +70,14 @@ LIMIT 10;
 ```sql
 WITH CTE AS (
 SELECT
-	txn_id,
+    txn_id,
     sum (qty*price) revenue
 FROM
-	balanced_tree.sales
+    balanced_tree.sales
 GROUP BY 1)
 
 SELECT
-	percentile_cont(0.25) within group (order by revenue asc) as percentile_25,
+    percentile_cont(0.25) within group (order by revenue asc) as percentile_25,
     percentile_cont(0.50) within group (order by revenue asc) as percentile_50,
     percentile_cont(0.75) within group (order by revenue asc) as percentile_75
 FROM CTE;
@@ -97,7 +97,7 @@ FROM CTE;
 SELECT
     sum (discount) / count (distinct txn_id) avg_discount
 FROM
-	balanced_tree.sales;
+    balanced_tree.sales;
 ```
 
 *Result:*
@@ -110,11 +110,11 @@ FROM
 *Answer:*
 ```sql
 SELECT
-	member,
+    member,
     count (distinct txn_id) as transactions,
     round (100 * count(distinct txn_id)::numeric / (SELECT count (distinct txn_id) FROM balanced_tree.sales),2) percentage
 FROM
-	balanced_tree.sales
+    balanced_tree.sales
 GROUP BY 1;
 ```
 
@@ -129,11 +129,11 @@ GROUP BY 1;
 *Answer:*
 ```sql
 SELECT
-	member,
+    member,
     sum(qty*price) revenue,
     round (100 * sum(qty*price)::numeric / (SELECT sum(qty*price) FROM balanced_tree.sales),2) percentage
 FROM
-	balanced_tree.sales
+    balanced_tree.sales
 GROUP BY 1
 ```
 
@@ -149,12 +149,12 @@ GROUP BY 1
 *Answer:*
 ```sql
 SELECT
-	pd.product_name,
+    pd.product_name,
     sum (s.qty*s.price) revenue
 FROM
-	balanced_tree.product_details pd
+    balanced_tree.product_details pd
 JOIN
-	balanced_tree.sales s     
+    balanced_tree.sales s     
 ON s.prod_id = pd.product_id    
 GROUP BY 1
 ORDER BY 2 DESC
@@ -173,14 +173,14 @@ LIMIT 3;
 *Answer:*
 ```sql
 SELECT
-	pd.segment_name,
+    pd.segment_name,
     sum(s.qty) as total_quantity,
     sum(s.qty*s.price) as revenue,
     sum(s.discount) as total_discount
 FROM
-	balanced_tree.sales s
+    balanced_tree.sales s
 JOIN
-	balanced_tree.product_details pd
+    balanced_tree.product_details pd
 ON s.prod_id = pd.product_id
 GROUP BY 1
 ORDER BY 3 DESC;
@@ -200,14 +200,14 @@ ORDER BY 3 DESC;
 ```sql
 WITH CTE_3 AS (
 SELECT
-	pd.segment_name,
+    pd.segment_name,
     pd.product_name,
     sum(s.qty) as total_quantity,
     rank () OVER (PARTITION BY pd.segment_name ORDER BY sum(s.qty) DESC) ranks
 FROM
-	balanced_tree.sales s
+    balanced_tree.sales s
 JOIN
-	balanced_tree.product_details pd
+    balanced_tree.product_details pd
 ON s.prod_id = pd.product_id
 GROUP BY 1, 2
 ORDER BY 1, 2 DESC)
@@ -233,14 +233,14 @@ WHERE ranks = 1;
 *Answer:*
 ```sql
 SELECT
-	pd.category_name,
+    pd.category_name,
     sum(s.qty) as total_quantity,
     sum(s.qty*s.price) as revenue,
     sum(s.discount) as total_discount
 FROM
-	balanced_tree.sales s
+    balanced_tree.sales s
 JOIN
-	balanced_tree.product_details pd
+    balanced_tree.product_details pd
 ON s.prod_id = pd.product_id
 GROUP BY 1
 ORDER BY 3 DESC;
@@ -257,14 +257,14 @@ ORDER BY 3 DESC;
 ```sql
 WITH CTE_5 AS (
 SELECT
-	pd.category_name,
+    pd.category_name,
     pd.product_name,
     sum(s.qty) as total_quantity,
     rank () OVER (PARTITION BY pd.category_name ORDER BY sum(s.qty) DESC) ranks
 FROM
-	balanced_tree.sales s
+    balanced_tree.sales s
 JOIN
-	balanced_tree.product_details pd
+    balanced_tree.product_details pd
 ON s.prod_id = pd.product_id
 GROUP BY 1, 2
 ORDER BY 1, 2 DESC)
@@ -289,22 +289,22 @@ WHERE ranks = 1;
 with cte_6 as (
 
 SELECT
-	pd.segment_name,
+    pd.segment_name,
     pd.product_name,
     sum(s.qty*s.price) as revenue
 FROM
-	balanced_tree.sales s
+    balanced_tree.sales s
 JOIN
-	balanced_tree.product_details pd
+    balanced_tree.product_details pd
 ON s.prod_id = pd.product_id
 GROUP BY 1, 2)
 
 SELECT
-	*,
+    *,
     sum(revenue) OVER (PARTITION BY segment_name) segment_revenue,
     ROUND (100 * revenue::numeric / sum (revenue) OVER (PARTITION BY segment_name),2) as pct
 FROM
-	cte_6
+    cte_6
 ORDER BY 1, 5 DESC;    
 ```
 
@@ -331,22 +331,22 @@ ORDER BY 1, 5 DESC;
 with cte_7 as (
 
 SELECT
-	pd.category_name,
+    pd.category_name,
     pd.segment_name,
     sum(s.qty*s.price) as revenue
 FROM
-	balanced_tree.sales s
+    balanced_tree.sales s
 JOIN
-	balanced_tree.product_details pd
+    balanced_tree.product_details pd
 ON s.prod_id = pd.product_id
 GROUP BY 1, 2)
 
 SELECT
-	*,
+    *,
     sum(revenue) OVER (PARTITION BY category_name) category_revenue,
     ROUND (100 * revenue::numeric / sum (revenue) OVER (PARTITION BY category_name),2) as pct
 FROM
-	cte_7
+    cte_7
 ORDER BY 1, 5 DESC;
 ```
 
@@ -363,13 +363,13 @@ ORDER BY 1, 5 DESC;
 *Answer:*
 ```sql
 SELECT
-	pd.category_name,
+    pd.category_name,
     sum(s.qty*s.price) as revenue,
     round (100 * sum(s.qty*s.price)::numeric / (SELECT sum(qty*price) FROM balanced_tree.sales), 2) pct
 FROM
-	balanced_tree.sales s
+    balanced_tree.sales s
 JOIN
-	balanced_tree.product_details pd
+    balanced_tree.product_details pd
 ON s.prod_id = pd.product_id
 GROUP BY 1;
 ```
@@ -386,10 +386,10 @@ GROUP BY 1;
 *Answer:*
 ```sql
 SELECT
-	prod_id,
+    prod_id,
     round (100 * count (*)::numeric / (SELECT count (distinct txn_id) FROM balanced_tree.sales),2) as penetration
 FROM
-	balanced_tree.sales
+    balanced_tree.sales
 GROUP BY 1
 ORDER BY 2 DESC;
 ```
