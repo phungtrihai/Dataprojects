@@ -22,8 +22,7 @@
 
 **Data Type in SQL Server**
 
-![Alt text](image-1.png)
-
+![Alt text](image-22.png)
 - Text data type:
     + `CHAR`: have fix length (Use in fields that we have specific length of that data)
 Ex: `CHAR`(10) - Phone number
@@ -59,18 +58,18 @@ Key in SQL is a column or multiple columns used to identify and distinguish rows
 - **Primary key**: Use to identify each row of data in the table (unique and not null)
 - **Foreign key**: Use to mapping to another table
 
-![Alt text](image-2.png)
+![Alt text](Picture1.png)
 
 **Relationship in tables**
 
 - One to One: 
-![Alt text](image-3.png)
+![Alt text](image-23.png)
 
 - One to many: 
-![Alt text](image-4.png)
+![Alt text](image-24.png)
 
 - Many to many:
-![Alt text](image-5.png)
+![Alt text](image-25.png)
 
 **Logic operator in SQL**
 
@@ -90,15 +89,15 @@ Key in SQL is a column or multiple columns used to identify and distinguish rows
 ## **Lec 3 - JOIN & UNION & USEFUL FUNCTIONS IN SQL**
 
 **JOIN**
-![Alt text](image-6.png)
+![Alt text](image-26.png)
 
-![Alt text](image-7.png)
+![Alt text](image-27.png)
 
 **UNION / UNION ALL**
 
-```The selected union tables must have the same column and data type
 ```
-
+The selected union tables must have the same column and data type
+```
 => UNION: Remove duplicate
 
 ## **Lec 4 - CASE - WHEN, GROUP BY, HAVING IN SQL**
@@ -118,7 +117,7 @@ The `GROUP BY` statement is often used with aggregate functions (`COUNT(), MAX()
 The HAVING clause was added to SQL because the WHERE keyword cannot be used with aggregate functions.
 
 **Thứ tự thực hiện câu lệnh**
-![Alt text](image-8.png)
+![Alt text](image-28.png)
 
 ## **Lec 5 - SUBQUERY - CTE - VIEW IN SQL**
 
@@ -154,9 +153,7 @@ We can connect data from different data sources to PBI such as: flat file, Azure
 
 **Data visualization**
 
-![Alt text](image-10.png)
-![Alt text](image-11.png)
-![Alt text](image-12.png)
+![Alt text](image-29.png)
 
 ## **Lec 7 - Data normalization**
 
@@ -190,11 +187,11 @@ Snowflake Schema (lược đồ hình bông tuyết)
 ```
 - Star Schema
 
-![Alt text](image-13.png)
+![Alt text](image-30.png)
 
 - Snowflake Schema
 
-![Alt text](image-14.png)
+![Alt text](image-31.png)
 
 ## **Lec 8 - DAX in Power BI**
 
@@ -203,4 +200,131 @@ Snowflake Schema (lược đồ hình bông tuyết)
 Formula or Function use to Calculate metric and Analyze data
 ```
 
-![Alt text](image-15.png)
+
+
+**Calculated Columns Vs Measures**
+
+| Calculated Columns | Measures | 
+| ---- | ---- |
+| Create Calculated column in existing table | Dont Create Column | 
+| Use when we want to create column for further calculation | Use when want to optimize report performance|
+| Calculate row by row | Calculate overall |
+
+**Usefull functions**
+
+- `DATEDIFF()` - Calculate interval
+
+- `DATEADD()` - Add interval to a date
+
+- `DATEINPERIOD()` - Check whether <date> in specific range => return `True/False`
+
+- `DATESYTD()` - Calculated YTD values
+
+- `Calculate()` - Add filter base on given conditions
+
+- `All()`- Remove filter in DAX measure
+
+## **Lec 9 - Python Overview**
+
+**Overview**
+
+- Python is a **open source** programming language with a wide range community
+
+- Python provide **simple syntax** for writting code
+
+- Widely use in making **App, Web, Data analysis**,..
+
+=> We use python to process large dataset (over million records)
+
+**Python Syntax**
+
+- **Line Structure**: In Python, a program is divided into a number of `logical lines` and every logical line is terminated by the token `NEWLINE`
+
+- **Indentation**: in Python, indentation is very important as it is used to indicate a `block of code` (Must have the same number of spaces in the same block of code, otherwise Python will give you an error.)
+
+- **Identifier**: Variable that we define in python (must follow some rules)
+
+- **Comments**: Add # to add comments in python, use to explain or give more details about the code
+
+**Variable**
+
+We use variable to store and represent a values
+
+We can change variable values 
+
+* Ex: `a = 'Hello World'`
+
+**Data type**
+
+![Alt text](image-32.png)
+
+- **Numeric data type**: 
+    - `Int`: Integer
+    - `Float`: Số thực
+    - `Complex`: Số phức 
+
+- **Boolean**: Use to represent logic values (`True` / `False`)   
+
+- **Sequence**:  Sequence data type allows users to access its elements through index (and can be slicing).
+    - String `''`
+
+        Ex: `x = 'We dont talk any more'` -->
+            `x[0:1]` --> We
+
+    - List `[]`
+
+        Ex: x = [a, b, c, 1, 2, 3]
+
+    - Tupple `()` (Can not change elements directly)
+
+        Ex: x = (a, b, c, 1, 2, 3)
+
+![Alt text](image-16.png)
+
+![Alt text](image-17.png)
+
+**Python Operator**
+
+- Math Operator: 
+![Alt text](image-18.png)
+
+- Logic Operator: 
+![Alt text](image-19.png)
+
+- Comparation Operator
+![Alt text](image-20.png)
+
+**Conditional Statement**
+
+![Alt text](image-21.png)
+
+
+## **Lec 10 - For loop in Python**
+
+**For loop in Python**
+
+- For: `for i in range(1,1000):` - Use when we know how many time to loop.
+
+```python
+# Print sum of number from 1-100
+x = 0
+for i in range (1, 101):
+    x = x + i
+print(x)    
+```
+- While: `while i < 1000:` iteration when a condition is meet
+
+```python
+# Print sum of number from 1-100
+x = 0
+while i < 101:
+    x = x + i
+print(x)    
+```
+
+**Functions in Python**
+
+![Alt text](image-33.png)
+
+## **Lec 11 - Pandas in Python**
+
