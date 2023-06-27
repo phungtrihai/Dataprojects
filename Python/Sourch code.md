@@ -66,3 +66,16 @@ for rect in ax.patches:
     ax.annotate('{:.0f}'.format(rect.get_height()), (rect.get_x()+0.4, rect.get_height()),
                         ha='center', va='bottom',
                         color= 'black', weight = "bold", fontsize = 11)
+```
+
+Input a list & array
+```python
+row = list(map(int, input(f"Enter row {i+1} (separated by spaces): ").split()))
+
+
+#Input a 2 dimensional array
+rows = int(input("Enter the number of rows: "))
+arr = []
+for i in range(rows):
+    row = list(map(int, input(f"Enter row {i+1} (separated by spaces): ").split()))
+    arr.append(row)
