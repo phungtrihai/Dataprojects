@@ -327,4 +327,79 @@ print(x)
 ![Alt text](image-33.png)
 
 ## **Lec 11 - Pandas in Python**
+**Dictionary datatype**
 
+> In Python, a dictionary is a collection that allows us to store data in **key-value pairs**. A dictionary key can be almost any Python type, but are usually numbers or strings.
+
+**Benefits of using dictionaries in Python:**
+
+- Efficient for storing and retrieving data.
+- Easy to use.
+- Flexible and can be used to store a variety of data.
+
+**Some character of Dictionary**
+
+- Dictionaries are **unordered**, meaning that the order in which the key-value pairs are stored does not matter.
+- Dictionaries are **mutable**, meaning that they can be changed after they are created. We can 
+    - **Add** new key-value pairs to a dictionary
+    - **Remove** existing key-value pairs
+    - **Change** the value associated with a key
+
+```python
+dictionary = {"key1": "value1", "key2": "value2", "key3": "value3"}
+```
+
+**Pandas in Python**
+
+> Pandas is a Python library for **data analysis**. It is a powerful tool that can be used to *read, manipulate, and analyze data* in a variety of formats. Pandas is often used in data science and machine learning applications.
+
+**Here are some of the features of pandas:**
+
+- Read data from a variety of file formats, including CSV, Excel, and JSON.
+- It can be used to create and manipulate DataFrames, which are a powerful data structure for storing and analyzing data.
+- It provides a wide range of statistical functions for analyzing data.
+- It can be used to create visualizations of data.
+
+**Here are some of the benefits of using pandas:**
+- It is a powerful and versatile tool for data analysis.
+- It is easy to use and learn.
+- There is a large community of users and developers who can provide support.
+
+**Pandas Useful Function with dataframe**
+- Read data: `read_csv`
+- General info about data:
+    - `df.describe()`
+    - `df.info()`
+    - `df.isnull()`
+    - `df.duplicated()`
+
+- Change datatype:
+    - `to_datetime()`
+    - `to_numeric()`
+
+- Data Manipulation:
+    - `groupby()`
+    - `merge()`
+    - `append()`
+    - `sort_values()`
+    - `reset_index()`
+
+## **Lec 12 - Preprocessing - EDA with Python**
+
+![Alt text](image-2.png)
+**Step 1: Đánh giá dữ liệu**
+
+Đánh giá dữ liệu là thao tác xem **thông tin tổng quan** về bộ dữ liệu, sau đó xem chi tiết dữ liệu và rút ra nhận xét đảm bảo dữ liệu phải đạt được : 
+
+- Dữ liệu phải khớp : Ví dụ đơn vị tiền tệ cần đổi về 1 đơn vị tiền tệ duy nhất, đổi kiểu dữ liệu, …
+- Dữ liệu phải được nhất quán: Ví dụ giới tính phải đồng nhất Man /Woman hoặc Male/Female, …
+- Dữ liệu không có ngoại lai (Outlier): Các giá trị ngoại lai có thể xuất hiện do nhiều nguyên nhân trong quá trình thu thập dữ liệu. 
+Ví dụ như lỗi đánh máy, lỗi xử lý code, … ảnh hưởng tới kết quả phân tích rất lớn. Ví dụ như nghiên cứu về giá nhà của 1 quận, nhưng lại có diện tích 1 ngôi nhà bị rất lớn, hoặc số âm, … 
+- Dữ liệu không chứa giá trị thiếu (Missing Value)
+
+**Step 2: Data Cleaning**
+
+- Remove duplicate
+- Handle Null values
+- Change Data type (astype())
+- Handle text values
