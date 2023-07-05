@@ -383,6 +383,7 @@ dictionary = {"key1": "value1", "key2": "value2", "key3": "value3"}
     - `append()`
     - `sort_values()`
     - `reset_index()`
+    - `value_counts()`
 
 ## **Lec 12 - Preprocessing - EDA with Python**
 
