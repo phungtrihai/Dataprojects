@@ -553,3 +553,302 @@ mysql> SELECT product_cd, SUM(avail_balance) prod_balance
 A subquery is a query contained within another SQL statement (which I refer to as the containing statement for the rest of this discussion)
 
 ```
+
+## Subquery Types
+
+- Noncorrelated subqueries
+- Correlated subqueries
+
+### Noncorrelated subqueries
+
+```
+Noncorrelated subqueries can be executed alone and does not reference anything from the containing statement
+```
+
+#### Multiple-Row, Single-Column Subqueries
+
+Can be use with `IN`, `NOT IN`, `ALL` and `ANY` operators
+
+#### Multicolumn Subqueries
+
+Can be use in the FROM clause
+
+### Correlated Subqueries
+
+A correlated subquery is a subquery that uses values from the outer query. It is a query nested inside another query and is executed once for every row processed by the outer query. The subquery is evaluated once for each row processed by the parent statement, which can be a SELECT, UPDATE, or DELETE statement 1.
+
+Correlated subqueries are used for row-by-row processing and can be slow because the subquery may be evaluated once for each row processed by the outer query 2.
+
+Here’s an example of a correlated subquery that finds all employees who earn more than the average salary in their department:
+
+```sql
+SELECT last_name, salary, department_id
+FROM employees outer
+WHERE salary > (SELECT AVG(salary)
+                FROM employees
+                WHERE department_id = outer.department_id);
+```
+
+In this example, the inner query calculates the average salary for each department and the outer query compares each employee’s salary to the average salary of their department.
+
+## When to Use Subqueries
+
+### Subqueries As Data Sources
+### Subqueries in Filter Conditions
+### Subqueries As Expression Generators
+
+
+# Chapter 10: Join Revisited
+
+## Outer Join
+### Left Versus Right Outer Joins
+```
+An outer join includes all of the rows from one table and includes data from the second
+table only if matching rows are found
+```
+
+### Self Outer Joins
+
+## Cross Join
+
+# Chapter 11: Conditional Logic
+
+## The Case Expression
+
+Case expressions are also designed to facilitate if-then-else logic but enjoy two advantages over built-in functions:
+- The case expression is part of the SQL standard (SQL92 release) and has been implemented by Oracle Database, SQL Server, MySQL, Sybase, PostgreSQL, IBM UDB, and others.
+- Case expressions are built into the SQL grammar and can be included in select, insert, update, and delete statements.
+
+### Searched Case Expressions
+
+```sql
+CASE
+WHEN C1 THEN E1
+WHEN C2 THEN E2
+...
+WHEN CN THEN EN
+[ELSE ED]
+END
+```
+
+### Simple Case Expressions
+The simple case expression is quite similar to the searched case expression but is a bit
+less flexible. Here’s the syntax:
+
+```sql
+CASE V0
+WHEN V1 THEN E1
+WHEN V2 THEN E2
+...
+WHEN VN THEN EN
+[ELSE ED]
+END
+```
+
+## Case Expression Examples
+### Result Set Transformations
+=> SUM (CASE WHEN)
+
+### Selective Aggregation
+### Checking for Existence
+
+### Division-by-Zero Errors
+```sql
+mysql> SELECT a.cust_id, a.product_cd, a.avail_balance /
+-> CASE
+-> WHEN prod_tots.tot_balance = 0 THEN 1
+-> ELSE prod_tots.tot_balance
+-> END percent_of_total
+-> FROM account
+```
+
+### Conditional Updates
+### Handling Null Values
+
+```sql
+SELECT <some calculation> +
+CASE
+WHEN avail_balance IS NULL THEN 0
+ELSE avail_balance
+END
+```
+
+If a numeric column is allowed to contain null values, it is generally a good idea to use
+conditional logic in any calculations that include the column so that the results are
+usable.
+
+# Chapter 12: Transactions
+## Locking
+
+> Locks are the mechanism the database server uses to control simultaneous use of data resources. When some portion of the database is locked, any other users wishing to modify (or possibly read) that data must wait until the lock has been released.
+
+=> Most database servers use one of two locking strategies:
+- Database writers must request and receive from the server a **write lock** to modify
+data, and database readers must request and receive from the server a **read lock** to query data. 
+- Database writers must request and receive from the server a write lock to modify data, but readers do not need any type of lock to query data. Instead, the server ensures that a reader sees a consistent view of the data (the data seems the same
+even though other users may be making modifications) from the time her query
+begins until her query has finished. This approach is known as versioning.
+
+There are pros and cons to both approaches. The first approach can lead to **long wait times** if there are many concurrent read and write requests, and the second approach can be problematic if there are **long-running queries** while data is being modified. 
+
+=> Microsoft SQL Server uses the first approach,
+Oracle Database uses the second approach, and MySQL uses both approaches (depending on your choice of storage engine, which we’ll discuss a bit later in the chapter).
+
+## Lock Granularities
+
+- *Table locks*
+Keep multiple users from modifying data in the same table simultaneously
+- *Page locks*
+Keep multiple users from modifying data on the same page (a page is a segment of
+memory generally in the range of 2 KB to 16 KB) of a table simultaneously
+- *Row locks*
+Keep multiple users from modifying the same row in a table simultaneously
+
+## What Is a Transaction?
+
+A transaction in SQL is a sequence of operations performed as a single logical unit of work. It groups a set of tasks into a **single execution unit**. Each transaction begins with a specific task and ends when all the tasks in the group successfully complete. If any of the tasks fail, the transaction fails, and all changes made during the transaction are rolled back, returning the database to its previous state ¹.
+
+Transactions are used to ensure data integrity and consistency in the database. They have four key properties, known as ACID properties: Atomicity, Consistency, Isolation, and Durability.
+
+In SQL, transactions can be controlled using several commands, including `BEGIN TRANSACTION`, `COMMIT`, `ROLLBACK`, and `SAVEPOINT`. The `BEGIN TRANSACTION` command marks the start of a transaction, while the `COMMIT` command saves all changes made during the transaction to the database. The `ROLLBACK` command undoes all changes made during the transaction, and the `SAVEPOINT` command creates a point within the transaction to which you can roll back.
+***
+# Chapter 13: Indexes and Constraints
+## Indexes
+When you insert a row into a table, the database server does not attempt to put the
+data in any particular location within the table.  
+=> Instead, the server simply places
+the data in **the next available location** within the file (the server maintains a list of free
+space for each table)
+
+Database server uses indexes to **locate rows in a table**. Indexes are special tables that,
+unlike normal data tables, are kept in a **specific order**. Instead of containing all of the
+data about an entity, however, an index contains only the column (or columns) used
+to locate rows in the data table, along with information describing where the rows are
+physically located. 
+
+=> Therefore, the role of indexes is to facilitate the retrieval of a subset
+of a table’s rows and columns without the need to inspect every row in the table.
+
+## Index Creation
+
+When the table was created, the MySQL server automatically generated an index on
+the primary key column
+
+### Unique indexes
+```sql
+mysql> ALTER TABLE department
+-> ADD UNIQUE dept_name_idx (name);
+```
+
+### Multicolumn indexes
+```sql
+mysql> ALTER TABLE employee
+-> ADD INDEX emp_names_idx (lname, fname);
+```
+
+## Types of Indexes
+### B-tree indexes
+
+Balance tree index => kind of similiar to tree map
+
+### Bitmap indexes
+
+For columns that contain only a small number of values across a large number of rows
+(known as low-cardinality data)
+
+### Text indexes
+
+If your database stores documents, you may need to allow users to search for words or
+phrases in the documents. You certainly don’t want the server to open each document
+and scan for the desired text each time a search is requested
+
+## How indexes are used
+
+## The Downside of Indexes
+
+keep in mind that every index is a
+table (a special type of table, but still a table). Therefore, every time a row is added to
+or removed from a table, all indexes on that table must be modified
+
+=>  Therefore, the more indexes you have, the more work the server needs to do
+to keep all schema objects up-to-date, which tends to slow things down
+
+you can use this strategy as a default:
+
+- Make sure all primary key are indexes
+- Build indexes on all columns that are referenced in foreign key constraints
+- Index any columns that will frequently be used to retrieve data. Most date columns
+are good candidates, along with short (3- to 50-character) string columns.
+
+## Constraint
+
+> A constraint is simply a restriction placed on one or more columns of a table. There are
+several different types of constraints, including:
+
+- Primary key constraints
+Identify the column or columns that guarantee uniqueness within a table
+- Foreign key constraints
+Restrict one or more columns to contain only values found in another table’s primary key columns, and may also restrict the allowable values in other tables if
+update cascade or delete cascade rules are established
+- Unique constraints
+Restrict one or more columns to contain unique values within a table (primary key
+constraints are a special type of unique constraint)
+Check constraints
+Restrict the allowable values for a column
+
+## Constraint Creation
+```sql
+CONSTRAINT fk_product_type_cd FOREIGN KEY (product_type_cd)
+REFERENCES product_type (product_type_cd),
+CONSTRAINT pk_product PRIMARY KEY (product_cd)
+```
+
+If you want to remove a primary or foreign key constraint, you can use the alter
+table statement again, except that you specify drop instead of add, as in:
+```sql
+ALTER TABLE product
+DROP PRIMARY KEY;
+ALTER TABLE product
+DROP FOREIGN KEY fk_product_type_cd;
+```
+***
+# Chapter 14: Views
+## What are Views
+
+A view is simply a mechanism for querying data. Unlike tables, views do not involve
+data storage;
+
+## Why use Views
+### Data Security
+### Data Aggregation
+### Hiding Complexity
+### Joining Partitioned Data
+
+# Chapter 15: Metadata
+
+## Data about data
+
+Metadata is essentially data about data. Every time you create a database object, the
+database server needs to record various pieces of information. 
+
+    • Table name
+    • Table storage information (tablespace, initial size, etc.)
+    • Storage engine
+    • Column names
+    • Column data types
+    • Default column values
+    • NOT NULL column constraints
+    • Primary key columns
+    • Primary key name
+    • Name of primary key index
+    • Index names
+    • Index types (B-tree, bitmap)
+    • Indexed columns
+    • Index column sort order (ascending or descending)
+    • Index storage information
+    • Foreign key name
+    • Foreign key columns
+    • Associated table/columns for foreign keys
+
+
+
