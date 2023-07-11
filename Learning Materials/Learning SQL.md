@@ -1,5 +1,4 @@
-<h1 style="text-align: center;">LEARNING SQL - Alan Beaulieu</h1>
-Some content
+<h1 style="text-align: center;"> LEARNING SQL - Alan Beaulieu </h1>
 
 # Chapter 1: A Little Background
 
