@@ -1,11 +1,13 @@
+<h1 style="text-align: center;">LEARNING SQL - Alan Beaulieu</h1>
+Some content
+
 # Chapter 1: A Little Background
 
-## Introduction to Database
-One final note: SQL is not an acronym for anything (although many people will insist
-it stands for “Structured Query Language”). When referring to the language, it is equally acceptable to say the letters individually (i.e., S. Q. L.) or to use the word sequel.
+## Introduction to Database 
+One final note: SQL is not an acronym for anything (although many people will insist it stands for “Structured Query Language”). When referring to the language, it is equally acceptable to say the letters individually (i.e., S. Q. L.) or to use the word sequel.
 
 ## SQL: A Nonprocedural Language
-> SQL statements define the necessary inputs and outputs, but the manner in which a statement is executed is left to a component of your database engine known as the optimizer. The optimizer’s job is to look at your SQL statements and, taking into account how your tables are configured and what indexes are available, **decide the most efficient execution path** (well, not always the most efficient). 
+> SQL statements define the necessary inputs and outputs, but the manner in which a statement is executed is left to a component of your database engine known as the **optimizer**. The optimizer’s job is to look at your SQL statements and, taking into account how your tables are configured and what indexes are available, **decide the most efficient execution path** (well, not always the most efficient). 
 ***
 # Chapter 2: Creating and Populating a Database
 
@@ -13,9 +15,9 @@ it stands for “Structured Query Language”). When referring to the language, 
 
 ### Character Data
 
-- Char(N) - Fix length  
-- Varchar(N) - variable length  
-- Text
+    - Char(N) - Fix length (Phone number)  
+    - Varchar(N) - Variable length (City, Country,..)  
+    - Text - Store long text (email, comment,...)
 
 ### Numeric Data
 
@@ -35,9 +37,9 @@ Float type
 
 ### Temoral Data
 
-- Date  *`Default format: YYYY/MM/DD`*
-- Datetime
-- Timestamp
+    - Date  (Default format: YYYY/MM/DD)
+    - Datetime
+    - Timestamp
 
 ## Table Creation
 
@@ -82,7 +84,6 @@ mysql> INSERT INTO person
 -> street, city, state, country, postal_code)
 -> VALUES (null, 'Susan','Smith', 'F', '1975-11-02',
 -> '23 Maple St.', 'Arlington', 'VA', 'USA', '20220');
-Query OK, 1 row affected (0.01 sec)
 ```
 
 **Note:**
@@ -91,7 +92,7 @@ Query OK, 1 row affected (0.01 sec)
 - If values were not provided for columns => It will return NULL ( In case the column is not allow null -> Errors)
 
 ### Updating Data
-
+=> Use `UPDATE` function together with `WHERE` condition
 ```sql
 mysql> UPDATE person
 -> SET street = '1225 Tremont St.',
@@ -100,16 +101,14 @@ mysql> UPDATE person
 -> country = 'USA',
 -> postal_code = '02138'
 -> WHERE person_id = 1;
-Query OK, 1 row affected (0.04 sec)
-Rows matched: 1 Changed: 1 Warnings: 0
 ```
 
 ### Deleting Data
+=> Use `DELETE FROM` together with `WHERE` condition
 
 ```sql
 mysql> DELETE FROM person
 -> WHERE person_id = 2;
-Query OK, 1 row affected (0.01 sec)
 ```
 
 ## When Good Statements Go Bad (Error)
@@ -148,7 +147,7 @@ ERROR 1265 (01000): Data truncated for column 'gender' at row 1
 ### Invalid Date Conversions
 
 Here’s an example that
-uses a date format that does not match the default date format of “YYYY-MM-DD”:
+uses a date format that does not match the default date format of `YYYY-MM-DD`:
 ```sql
 mysql> UPDATE person
 -> SET birth_date = 'DEC-21-1980'
@@ -165,37 +164,36 @@ Query OK, 1 row affected (0.12 sec)
 ```
 Here are a few more formatters that you might need when converting strings to datetimes in MySQL:
 
-%a The short weekday name, such as Sun, Mon, ...  
-%b The short month name, such as Jan, Feb, ...  
-%c The numeric month (0..12)  
-%d The numeric day of the month (00..31)  
-%f The number of microseconds (000000..999999)  
-%H The hour of the day, in 24-hour format (00..23)  
-%h The hour of the day, in 12-hour format (01..12)  
-%i The minutes within the hour (00..59)  
-%j The day of year (001..366)  
-%M The full month name (January..December)  
-%m The numeric month  
-%p AM or PM  
-%s The number of seconds (00..59)  
-%W The full weekday name (Sunday..Saturday)  
-%w The numeric day of the week (0=Sunday..6=Saturday)  
-%Y The four-digit y  
+`%a` The short weekday name, such as Sun, Mon, ...  
+`%b` The short month name, such as Jan, Feb, ...  
+`%c` The numeric month (0..12)  
+`%d` The numeric day of the month (00..31)  
+`%f` The number of microseconds (000000..999999)  
+`%H` The hour of the day, in 24-hour format (00..23)  
+`%h` The hour of the day, in 12-hour format (01..12)  
+`%i` The minutes within the hour (00..59)  
+`%j` The day of year (001..366)  
+`%M` The full month name (January..December)  
+`%m` The numeric month  
+`%p` AM or PM  
+`%s` The number of seconds (00..59)  
+`%W` The full weekday name (Sunday..Saturday)  
+`%w` The numeric day of the week (0=Sunday..6=Saturday)  
+`%Y` The four-digit y  
 ***
 # Chapter 3: Query Primer
 ## Query Clauses
 
-Several components or clauses make up the select statement. While only one of them
-is mandatory when using MySQL (the select clause)
+Several components or clauses make up the select statement. While only Select clause is mandatory when using MySQL.
 
 Query Clauses (6 Major clauses)
 
-- **Select:** Determines which columns to include in the query’s result set
-- **From:** Identifies the tables from which to draw data and how the tables should be joined
-- **Where:** Filters out unwanted data
-- **Group by:** Used to group rows together by common column values
-- **Having** Filters out unwanted groups
-- **Order by** Sorts the rows of the final result set by one or more columns
+- `Select`: Determines which columns to include in the query’s result set
+- `From`: Identifies the tables from which to draw data and how the tables should be joined
+- `Where`: Filters out unwanted data
+- `Group by`: Used to group rows together by common column values
+- `Having`: Filters out unwanted groups
+- `Order by`: Sorts the rows of the final result set by one or more columns
 
 ## The Select Clause
 Even though the select clause is the first clause of a select statement, it is one of the
@@ -335,20 +333,18 @@ mysql> SELECT d.name, count(e.emp_id) num_employees
 
 ## The order by Clause
 
-```
-The order by clause is the mechanism for sorting your result set using either raw column
+> The order by clause is the mechanism for sorting your result set using either raw column
 data or expressions based on column data.
-```
+
 ```sql 
 mysql> SELECT open_emp_id, product_cd
 -> FROM account
 -> ORDER BY open_emp_id;
 ```
 ### Ascending Versus Descending Sort Order
-```
-When sorting, you have the option of specifying ascending or descending order via the
-asc and desc keywords
-``` 
+
+> When sorting, you have the option of specifying ascending or descending order via the
+asc and desc keywords. 
 
 ### Sorting via Expressions
 ```sql
@@ -380,10 +376,10 @@ always reference columns by name when writing code.
 
 ## Type of Conditions
 
-Equally: =  
-Non-equally: <>  
-Range: Between .. and    
-Matching: LIKE  
+Equally: `=`  
+Non-equally: `<>`  
+Range: `Between .. and`    
+Matching: `LIKE`  
 ***
 # Chapter 5: Querying Multiple Tables
 
@@ -423,9 +419,8 @@ When performing set operations on two data sets, the following guidelines must a
 ## Set Operators
 
 ### The union Operator
-```
-The union and union all operators allow you to combine multiple data sets. 
-```
+
+> The union and union all operators allow you to combine multiple data sets. 
 
 => Union sorts the combined set and removes duplicates, whereas union all does not. 
 
@@ -438,9 +433,9 @@ mysql> SELECT 'IND' type_cd, cust_id, lname name
 ```
 
 ### The intersect Operator
-```
- INTERSECT returns distinct rows that are output by both the left and right input queries operator.
- ```
+
+> INTERSECT returns distinct rows that are output by both the left and right input queries operator.
+
 ```sql
 SELECT emp_id, fname, lname
 FROM employee
@@ -451,9 +446,7 @@ FROM individual;
 
 ### The except Operator
 
-```
-The except operator returns the first table minus any overlap with the second table.
-```
+> The except operator returns the first table minus any overlap with the second table.
 
 ```sql
 SELECT emp_id
@@ -493,6 +486,30 @@ over the other set operators.
 ***
 # Chapter 7: Data Generation, Conversion, and Manipulation
 
+## Working with Strings
+
+- `LEFT`
+- `RIGHT`
+- `SUBSTRING`
+- `CONCAT`
+- `LIKE`
+- `LENGTH`
+- `REPLACE`
+- `TRIM`
+
+## Working with number
+
+- `ROUND` / `FLOOR` / `CEIL`
+- `ABS`
+- `SQRT`
+- `POWER`
+
+## Worikng with Datetime
+
+- `EXTRACT`
+- `DATE_TRUNC`
+- `DATE_PART`
+
 # Chapter 8: Grouping & Aggregates
 
 ## Grouping Concepts
@@ -501,7 +518,7 @@ over the other set operators.
 `Max()` Returns the maximum value within a set  
 `Min()` Returns the minimum value within a set  
 `Avg()` Returns the average value across a set  
-`Sum()` the sum of the values across a set  
+`Sum()` Returns the sum of the values across a set  
 `Count()` Returns the number of values in a set  
 
 ## Implicit Versus Explicit Groups
@@ -521,7 +538,7 @@ mysql> SELECT MAX(pending_balance - avail_balance) max_uncleared
 ## How Nulls Are Handled
 The `sum()`, `max()`, and `avg()` ignore any null values encountered.  
 
-Count(*) counts the number of rows, whereas count(val) counts the number of values contained in the val column and ignores any null values encountered
+`Count(*)` counts the number of rows, whereas count(val) counts the number of values contained in the val column and ignores any null values encountered
 
 ## Generating Groups
 ## Generating Rollups
@@ -532,7 +549,7 @@ mysql> SELECT product_cd, open_branch_id,
 -> GROUP BY product_cd, open_branch_id WITH ROLLUP;
 ```
 
-=> The ROLLUP is an extension of the GROUP BY clause. The ROLLUP option allows you to include extra rows that represent the subtotals,
+=> The `ROLLUP` is an extension of the `GROUP BY` clause. The `ROLLUP` option allows you to include extra rows that represent the subtotals,
 
 ## Group Filter Conditions
 
@@ -549,10 +566,8 @@ mysql> SELECT product_cd, SUM(avail_balance) prod_balance
 # Chapter 9: Subqueries
 
 ## What Is a Subquery?
-```
-A subquery is a query contained within another SQL statement (which I refer to as the containing statement for the rest of this discussion)
 
-```
+> A subquery is a query contained within another SQL statement (which I refer to as the containing statement for the rest of this discussion)
 
 ## Subquery Types
 
@@ -815,7 +830,7 @@ DROP FOREIGN KEY fk_product_type_cd;
 # Chapter 14: Views
 ## What are Views
 
-A view is simply a mechanism for querying data. Unlike tables, views do not involve
+> A view is simply a mechanism for querying data. Unlike tables, views do not involve
 data storage;
 
 ## Why use Views
